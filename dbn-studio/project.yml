@@ -1,0 +1,62 @@
+name: DBNStudio
+options:
+  bundleIdPrefix: com.dbn-studio
+  deploymentTarget:
+    macOS: "14.0"
+    iOS: "17.0"
+  xcodeVersion: "16.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    ENABLE_USER_SCRIPT_SANDBOXING: false
+
+targets:
+  DBNStudio:
+    type: application
+    platform: [macOS, iOS]
+    sources:
+      - path: DBNStudio
+        excludes:
+          - "**/.DS_Store"
+    resources:
+      - path: web/dist
+        buildPhase: resources
+    preBuildScripts:
+      - name: Build Web Content
+        script: |
+          cd "${SRCROOT}/web"
+          if [ -f "package.json" ]; then
+            export PATH="/opt/homebrew/bin:$PATH"
+            npm run build
+          fi
+        basedOnDependencyAnalysis: false
+    postCompileScripts:
+      - name: Copy Web Content
+        script: |
+          DEST="${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WebContent/dbn"
+          mkdir -p "${DEST}"
+          cp -R "${SRCROOT}/web/dist/" "${DEST}/"
+        basedOnDependencyAnalysis: false
+        outputFiles:
+          - $(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/WebContent/dbn/index.html
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dbn-studio.app
+        PRODUCT_NAME: DBN Studio
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.developer-tools"
+        INFOPLIST_KEY_CFBundleDisplayName: "DBN Studio"
+        GENERATE_INFOPLIST_FILE: true
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      configs:
+        debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+    entitlements:
+      path: DBNStudio/DBNStudio.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true

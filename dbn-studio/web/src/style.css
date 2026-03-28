@@ -1,0 +1,86 @@
+/* DBN Studio — 引き算の美学 */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: #ffffff;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ─── 二つの主役だけを立てる ─── */
+
+#app {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+}
+
+/* ─── コード: 左の主役 ─── */
+
+#editor-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 48px 0 48px 48px;
+}
+
+#editor-container .cm-editor {
+  height: 100%;
+  flex: 1;
+}
+
+/* ─── キャンバス: 右の主役 ─── */
+/* 額装された作品のように扱う */
+
+#canvas-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+}
+
+#dbn-canvas {
+  /* 完全な正方形を保証 */
+  aspect-ratio: 1;
+
+  /* ビューポートに対して相対的にサイズ調整 */
+  /* 高さの60%を基準に、余白を確保 */
+  width: min(60vh, calc(100% - 96px));
+  height: auto;
+
+  /* ピクセルはシャープに — アンチエイリアスをかけない */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+
+  /* 装飾的なボーダーやシャドウで「かっこよく」しようとしない */
+  /* 存在を示す最小限の線 */
+  border: 1px solid #e0e0e0;
+}
+
+/* ─── レスポンシブ: モバイルでは縦並び ─── */
+
+@media (max-width: 768px) {
+  #app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  #editor-container {
+    padding: 24px 0 12px 24px;
+  }
+
+  #canvas-container {
+    padding: 12px 24px 24px;
+  }
+
+  #dbn-canvas {
+    width: min(50vw, calc(100% - 48px));
+  }
+}

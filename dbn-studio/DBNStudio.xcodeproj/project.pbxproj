@@ -1,0 +1,545 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		13133C57CE1C8AE6A9C54AB8 /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462259D2CFE81CDDDFF40048 /* ClaudeService.swift */; };
+		38B060C08620EA5E3D88F1B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E19F65CC8506B21299BEB9 /* ContentView.swift */; };
+		5BA308B578C8535FC334D08F /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462259D2CFE81CDDDFF40048 /* ClaudeService.swift */; };
+		5C0CA641BE0D1F1A9EDC8533 /* APIKeySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C6EC5AE9B55B9CE3276193 /* APIKeySettingsView.swift */; };
+		7032991D74B56EEEE2E0B0A0 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0ADFD606CEAD142AD15730 /* KeychainService.swift */; };
+		7188973F32E4D3F9D2C18CFD /* MessageBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C170ED65672B61359C2A5FF /* MessageBridge.swift */; };
+		861E492D0BC3B6B74676ACB6 /* BridgeMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B880C87C961554228A71AC5 /* BridgeMessages.swift */; };
+		8DEC39FE57A75A5560E81A6D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E19F65CC8506B21299BEB9 /* ContentView.swift */; };
+		92C6119697B10B50A01A439E /* DBNStudioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C9975834925BDCB4ACD41A /* DBNStudioApp.swift */; };
+		A57C9707D4EE9A98D71627C8 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0ADFD606CEAD142AD15730 /* KeychainService.swift */; };
+		B417D3D2347C21BF53711C29 /* WebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BF1962D54F3CB52BD869E0 /* WebViewRepresentable.swift */; };
+		BAE3312B4E7EB47F612D5DE3 /* APIKeySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C6EC5AE9B55B9CE3276193 /* APIKeySettingsView.swift */; };
+		CBCAF42A206C18DFD8C46D03 /* BridgeMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B880C87C961554228A71AC5 /* BridgeMessages.swift */; };
+		CCA4732A02B9303A737A1FA4 /* MessageBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C170ED65672B61359C2A5FF /* MessageBridge.swift */; };
+		D2FAB599B77884E17AA0AA28 /* WebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BF1962D54F3CB52BD869E0 /* WebViewRepresentable.swift */; };
+		E9F3292EAD0FFD102C5D7621 /* DBNStudioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C9975834925BDCB4ACD41A /* DBNStudioApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0050420A6018B37648B2E048 /* DBNStudio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DBNStudio.entitlements; sourceTree = "<group>"; };
+		2C170ED65672B61359C2A5FF /* MessageBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBridge.swift; sourceTree = "<group>"; };
+		462259D2CFE81CDDDFF40048 /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
+		5B880C87C961554228A71AC5 /* BridgeMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeMessages.swift; sourceTree = "<group>"; };
+		60C9975834925BDCB4ACD41A /* DBNStudioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBNStudioApp.swift; sourceTree = "<group>"; };
+		6C0ADFD606CEAD142AD15730 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		6F65D2358F6353D0BC9263F1 /* DBNStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBNStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9837A19505DD311CB109E21A /* DBNStudio.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = DBNStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6E19F65CC8506B21299BEB9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B1C6EC5AE9B55B9CE3276193 /* APIKeySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeySettingsView.swift; sourceTree = "<group>"; };
+		F5BF1962D54F3CB52BD869E0 /* WebViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentable.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2819B1323109423BC72C140A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B1C6EC5AE9B55B9CE3276193 /* APIKeySettingsView.swift */,
+				462259D2CFE81CDDDFF40048 /* ClaudeService.swift */,
+				6C0ADFD606CEAD142AD15730 /* KeychainService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		32E5147DF6AE28F76FDFC25B = {
+			isa = PBXGroup;
+			children = (
+				57BDC6CA627E684404FBCFEF /* DBNStudio */,
+				FD8B41040B02409CEF4A797F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4380AF7A595C31CA27CAE2C4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A6E19F65CC8506B21299BEB9 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		57BDC6CA627E684404FBCFEF /* DBNStudio */ = {
+			isa = PBXGroup;
+			children = (
+				8DB4556189A0EA2FE219545B /* Bridge */,
+				A8C85F2FC2AFECBD52D00439 /* Resources */,
+				2819B1323109423BC72C140A /* Services */,
+				4380AF7A595C31CA27CAE2C4 /* Views */,
+				907BE8D3291FD90399343161 /* WebContent */,
+				0050420A6018B37648B2E048 /* DBNStudio.entitlements */,
+				60C9975834925BDCB4ACD41A /* DBNStudioApp.swift */,
+			);
+			path = DBNStudio;
+			sourceTree = "<group>";
+		};
+		8DB4556189A0EA2FE219545B /* Bridge */ = {
+			isa = PBXGroup;
+			children = (
+				5B880C87C961554228A71AC5 /* BridgeMessages.swift */,
+				2C170ED65672B61359C2A5FF /* MessageBridge.swift */,
+				F5BF1962D54F3CB52BD869E0 /* WebViewRepresentable.swift */,
+			);
+			path = Bridge;
+			sourceTree = "<group>";
+		};
+		907BE8D3291FD90399343161 /* WebContent */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = WebContent;
+			sourceTree = "<group>";
+		};
+		A8C85F2FC2AFECBD52D00439 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		FD8B41040B02409CEF4A797F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9837A19505DD311CB109E21A /* DBNStudio.app */,
+				6F65D2358F6353D0BC9263F1 /* DBNStudio.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		48F46CE6EBCC92A9CD3113BA /* DBNStudio_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 21DDBB59F1AD2B4C94A2FC16 /* Build configuration list for PBXNativeTarget "DBNStudio_iOS" */;
+			buildPhases = (
+				7324D0615076D4662C8178A7 /* Build Web Content */,
+				1C8ED584E7C4BEB35DE018A1 /* Sources */,
+				3D43CF427E978BE9CC27F587 /* Copy Web Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DBNStudio_iOS;
+			packageProductDependencies = (
+			);
+			productName = DBNStudio_iOS;
+			productReference = 9837A19505DD311CB109E21A /* DBNStudio.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7BFCD7F0A02483BD96A12205 /* DBNStudio_macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8DCB17B90B67032B276A1736 /* Build configuration list for PBXNativeTarget "DBNStudio_macOS" */;
+			buildPhases = (
+				F77D6827A720209C61D8A277 /* Build Web Content */,
+				E7785FC9FA4CF9986B26F1E9 /* Sources */,
+				7D0E096EDAEB1A5087DC2DEE /* Copy Web Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DBNStudio_macOS;
+			packageProductDependencies = (
+			);
+			productName = DBNStudio_macOS;
+			productReference = 6F65D2358F6353D0BC9263F1 /* DBNStudio.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		305F4C578A6F58F5CE9DAAD5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = D13723DBF6F7FCDD802C824D /* Build configuration list for PBXProject "DBNStudio" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 32E5147DF6AE28F76FDFC25B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = FD8B41040B02409CEF4A797F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				48F46CE6EBCC92A9CD3113BA /* DBNStudio_iOS */,
+				7BFCD7F0A02483BD96A12205 /* DBNStudio_macOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3D43CF427E978BE9CC27F587 /* Copy Web Content */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Web Content";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/WebContent/dbn/index.html",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DEST=\"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WebContent/dbn\"\nmkdir -p \"${DEST}\"\ncp -R \"${SRCROOT}/web/dist/\" \"${DEST}/\"\n";
+		};
+		7324D0615076D4662C8178A7 /* Build Web Content */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Web Content";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${SRCROOT}/web\"\nif [ -f \"package.json\" ]; then\n  export PATH=\"/opt/homebrew/bin:$PATH\"\n  npm run build\nfi\n";
+		};
+		7D0E096EDAEB1A5087DC2DEE /* Copy Web Content */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Web Content";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/WebContent/dbn/index.html",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DEST=\"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WebContent/dbn\"\nmkdir -p \"${DEST}\"\ncp -R \"${SRCROOT}/web/dist/\" \"${DEST}/\"\n";
+		};
+		F77D6827A720209C61D8A277 /* Build Web Content */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Web Content";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${SRCROOT}/web\"\nif [ -f \"package.json\" ]; then\n  export PATH=\"/opt/homebrew/bin:$PATH\"\n  npm run build\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1C8ED584E7C4BEB35DE018A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C0CA641BE0D1F1A9EDC8533 /* APIKeySettingsView.swift in Sources */,
+				861E492D0BC3B6B74676ACB6 /* BridgeMessages.swift in Sources */,
+				13133C57CE1C8AE6A9C54AB8 /* ClaudeService.swift in Sources */,
+				38B060C08620EA5E3D88F1B9 /* ContentView.swift in Sources */,
+				92C6119697B10B50A01A439E /* DBNStudioApp.swift in Sources */,
+				7032991D74B56EEEE2E0B0A0 /* KeychainService.swift in Sources */,
+				7188973F32E4D3F9D2C18CFD /* MessageBridge.swift in Sources */,
+				B417D3D2347C21BF53711C29 /* WebViewRepresentable.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7785FC9FA4CF9986B26F1E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BAE3312B4E7EB47F612D5DE3 /* APIKeySettingsView.swift in Sources */,
+				CBCAF42A206C18DFD8C46D03 /* BridgeMessages.swift in Sources */,
+				5BA308B578C8535FC334D08F /* ClaudeService.swift in Sources */,
+				8DEC39FE57A75A5560E81A6D /* ContentView.swift in Sources */,
+				E9F3292EAD0FFD102C5D7621 /* DBNStudioApp.swift in Sources */,
+				A57C9707D4EE9A98D71627C8 /* KeychainService.swift in Sources */,
+				CCA4732A02B9303A737A1FA4 /* MessageBridge.swift in Sources */,
+				D2FAB599B77884E17AA0AA28 /* WebViewRepresentable.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		368388A6B133EB419E63802E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DBNStudio/DBNStudio.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "DBN Studio";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dbn-studio.app";
+				PRODUCT_NAME = "DBN Studio";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		85C27D31545A0FAF2D219239 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		8822F05A179C208310E05216 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DBNStudio/DBNStudio.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "DBN Studio";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dbn-studio.app";
+				PRODUCT_NAME = "DBN Studio";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A06A1D555F28A4A69B3B1A38 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DBNStudio/DBNStudio.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "DBN Studio";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dbn-studio.app";
+				PRODUCT_NAME = "DBN Studio";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		AFD81634BE7F53796E452973 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DBNStudio/DBNStudio.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "DBN Studio";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dbn-studio.app";
+				PRODUCT_NAME = "DBN Studio";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			};
+			name = Debug;
+		};
+		DA7DCAFE8AAD009441C50A50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		21DDBB59F1AD2B4C94A2FC16 /* Build configuration list for PBXNativeTarget "DBNStudio_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8822F05A179C208310E05216 /* Debug */,
+				368388A6B133EB419E63802E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8DCB17B90B67032B276A1736 /* Build configuration list for PBXNativeTarget "DBNStudio_macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AFD81634BE7F53796E452973 /* Debug */,
+				A06A1D555F28A4A69B3B1A38 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D13723DBF6F7FCDD802C824D /* Build configuration list for PBXProject "DBNStudio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA7DCAFE8AAD009441C50A50 /* Debug */,
+				85C27D31545A0FAF2D219239 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 305F4C578A6F58F5CE9DAAD5 /* Project object */;
+}

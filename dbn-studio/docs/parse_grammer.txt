@@ -1,0 +1,55 @@
+[DBN_PROGRAM] := [DBN_BLOCK]
+
+[DBN_BLOCK] := ([DBN_STATEMENT] | NEWLINE) *
+
+
+[DBN_STATEMENT] := [DBN_SET] |
+                   [DBN_REPEAT] |
+                   [DBN_COMMAND]
+
+
+[DBN_SET] := SET ([DBN_DOT] | WORD) [DBN_ARGUMENT] NEWLINE
+
+[DBN_REPEAT] := REPEAT WORD [DBN_ARGUMENT] [DBN_ARGUMENT] NEWLINE? OPENBRACE NEWLINE [DBN_BLOCK] CLOSEBRACE NEWLINE
+
+[DBN_COMMAND] := WORD [DBN_ARGUMENT]* NEWLINE
+
+[DBN_DOT] := OPENBRACKET [DBN_ARGUMENT] [DBN_ARGUMENT] CLOSEBRACKET
+
+[DBN_ARGUMENT] := WORD |
+                  [DBN_DOT] |
+                  [DBN_ARITHMATIC]
+
+
+[DBN_ARITHMATIC] := OPENPAREN [DBN_OPERAND] CLOSEPAREN
+
+[DBN_OPERAND] := NUMBER |
+                 [DBN_OPERATION]
+                 [DBN_ARITHMATIC]
+
+[DBN_OPERATION] := [DBN_BINARYOPERATION]
+
+[DBN_BINARYOPERATION] := [DBN_OPERAND] OPERATION [DBN_OPERAND]
+
+
+// --- 追加仕様（ソースコードから抽出） ---
+//
+// トークン種別:
+//   COMMENT: //(.+)
+//   OPERATOR: [*-/+]
+//   グルーパー: ( ) [ ] { }
+//   キーワード: Set, Repeat, Command
+//   条件式: Same?, NotSame?, Smaller?, NotSmaller?
+//   WORD: [A-z_][\w\d]*
+//   NUMBER: \d+
+//   NEWLINE: \n
+//
+// 条件式（Questions）:
+//   Same?, NotSame?, Smaller?, NotSmaller? は Repeat と同じ構文
+//   2引数 + ブレース囲みブロック
+//
+// Command 定義はトップレベルのみ許可
+// 算術式は () で囲む必要あり。優先順位: * / > - +
+// [x y] はピクセルドットアクセス（読み書き両方）
+// 組み込みコマンド: Paper(1引数), Pen(1引数), Line(4引数)
+// コメントは // 構文
