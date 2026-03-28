@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/design-engineering/interactive-visualizer/',
+  base: '/design-engineering/',
   server: {
     open: true,
   },
