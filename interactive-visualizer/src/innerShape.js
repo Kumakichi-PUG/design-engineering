@@ -124,9 +124,11 @@ function ambientOffset(index, time, amount) {
  * @param {number} ambientAmount - アンビエント振幅（px）
  * @param {number} randomAmount - 引っ込み量のランダムばらつき（0=均一, 1=最大）
  * @param {number} spacingRandomAmount - 間隔のランダムばらつき（0=等間隔, 1=最大）
+ * @param {number} angleRandomAmount - トゲ方向の角度ランダム（0=垂直, 1=±45°）
+ * @param {number} clampStrength - 自己交差防止の強さ（0=クランプなし, 1=最大制限）
  * @returns {paper.Point[]} ジグザグ化されたポイント列
  */
-export function generateZigzagPoints(whiteVertices, totalPoints, indentAmount, time = 0, ambientAmount = 0, randomAmount = 0, spacingRandomAmount = 0) {
+export function generateZigzagPoints(whiteVertices, totalPoints, indentAmount, time = 0, ambientAmount = 0, randomAmount = 0, spacingRandomAmount = 0, angleRandomAmount = 0, clampStrength = 0.5) {
   const n = whiteVertices.length;
 
   // 各辺の情報を構築
@@ -201,27 +203,37 @@ export function generateZigzagPoints(whiteVertices, totalPoints, indentAmount, t
     edgeIndices[i] = ei;
   }
 
-  // --- パス2: 引っ込み量を算出し、自己交差防止クランプを適用 ---
+  // --- パス2: 引っ込み量と角度オフセットを算出 ---
   const indents = new Array(totalPoints).fill(0);
+  const angles = new Array(totalPoints).fill(0); // 法線からの角度偏差（rad）
 
   for (let i = 0; i < totalPoints; i++) {
     if (i % 2 !== 1) continue; // 偶数番はスキップ
 
-    // ノイズで深さにばらつき
-    const noise = smoothNoise(i * 1.3 + 100, time * 0.4);
-    const multiplier = 1 + noise * randomAmount;
+    // 深さのばらつき: ノイズで 0〜3倍の範囲（ランダム量に応じて）
+    const depthNoise = smoothNoise(i * 1.3 + 100, time * 0.4);
+    const multiplier = 1 + depthNoise * randomAmount * 2;
     let rawIndent = indentAmount * Math.max(0, multiplier);
 
-    // --- 自己交差防止 ---
-    // 隣接する偶数番ポイント間のペリメーター距離の半分を上限とする
-    // これによりトゲの高さがトゲの幅を超えず、隣のトゲと交差しない
-    const prevEven = i - 1;
-    const nextEven = (i + 1) % totalPoints;
-    let span = distances[nextEven] - distances[prevEven];
-    if (span <= 0) span += totalPerimeter; // 周回ラップ対応
-    const maxIndent = span * 0.48; // 幅の48%まで（安全マージン）
+    // 角度のばらつき: ±45°（π/4）の範囲でノイズ
+    if (angleRandomAmount > 0) {
+      const angleNoise = smoothNoise(i * 0.9 + 300, time * 0.25);
+      angles[i] = angleNoise * (Math.PI / 4) * angleRandomAmount;
+    }
 
-    indents[i] = Math.min(rawIndent, maxIndent);
+    // --- 自己交差防止 ---
+    // clampStrength=0: クランプなし（rawIndentそのまま）
+    // clampStrength=1: 所属辺の長さの半分を上限
+    // 中間値で補間
+    if (clampStrength > 0) {
+      const edgeLen = edges[edgeIndices[i]].len;
+      const maxByEdge = edgeLen * 0.5;
+      // clampStrengthが低いほど上限が高い（制限が緩い）
+      const maxIndent = maxByEdge / clampStrength;
+      indents[i] = Math.min(rawIndent, maxIndent);
+    } else {
+      indents[i] = rawIndent;
+    }
   }
 
   // --- パス3: 最終ポイント座標を生成 ---
@@ -231,12 +243,30 @@ export function generateZigzagPoints(whiteVertices, totalPoints, indentAmount, t
     const edge = edges[edgeIndices[i]];
     const base = basePoints[i];
     const ambient = ambientOffset(i, time, ambientAmount);
-    const totalOffset = indents[i] + ambient;
 
-    points.push(new paper.Point(
-      base.x + edge.normal.x * totalOffset,
-      base.y + edge.normal.y * totalOffset,
-    ));
+    if (i % 2 === 1 && indents[i] > 0) {
+      // 奇数番: 法線を角度偏差で回転させてトゲ方向を決定
+      const nx = edge.normal.x;
+      const ny = edge.normal.y;
+      const angle = angles[i];
+      const cos = Math.cos(angle);
+      const sin = Math.sin(angle);
+      // 2D回転: (nx, ny) を angle だけ回転
+      const rnx = nx * cos - ny * sin;
+      const rny = nx * sin + ny * cos;
+
+      const depth = indents[i] + ambient;
+      points.push(new paper.Point(
+        base.x + rnx * depth,
+        base.y + rny * depth,
+      ));
+    } else {
+      // 偶数番: アンビエントのみ（法線方向）
+      points.push(new paper.Point(
+        base.x + edge.normal.x * ambient,
+        base.y + edge.normal.y * ambient,
+      ));
+    }
   }
 
   return points;
@@ -245,8 +275,8 @@ export function generateZigzagPoints(whiteVertices, totalPoints, indentAmount, t
 /**
  * ジグザグ化された白パスを生成する
  */
-export function createZigzagWhitePath(whiteVertices, totalPoints, indentAmount, time = 0, ambientAmount = 0, randomAmount = 0, spacingRandomAmount = 0) {
-  const points = generateZigzagPoints(whiteVertices, totalPoints, indentAmount, time, ambientAmount, randomAmount, spacingRandomAmount);
+export function createZigzagWhitePath(whiteVertices, totalPoints, indentAmount, time = 0, ambientAmount = 0, randomAmount = 0, spacingRandomAmount = 0, angleRandomAmount = 0, clampStrength = 0.5) {
+  const points = generateZigzagPoints(whiteVertices, totalPoints, indentAmount, time, ambientAmount, randomAmount, spacingRandomAmount, angleRandomAmount, clampStrength);
   return new paper.Path({
     segments: points,
     closed: true,

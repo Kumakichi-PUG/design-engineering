@@ -23,6 +23,12 @@ export async function initAudio() {
     analyser.smoothingTimeConstant = 0.3;
     source.connect(analyser);
     dataArray = new Uint8Array(analyser.frequencyBinCount);
+    console.log('[Audio] 初期化成功', {
+      state: audioContext.state,
+      fftSize: analyser.fftSize,
+      binCount: analyser.frequencyBinCount,
+      tracks: stream.getAudioTracks().map((t) => ({ label: t.label, enabled: t.enabled, readyState: t.readyState })),
+    });
     return true;
   } catch (err) {
     console.error('マイク入力の初期化に失敗:', err);
@@ -61,7 +67,16 @@ export function getVolume() {
   }
   const rms = Math.sqrt(sum / dataArray.length);
 
-  return Math.min(1, rms * 2);
+  const vol = Math.min(1, rms * 2);
+
+  // 1秒ごとにデバッグ出力（毎フレームだと重いので間引き）
+  if (!getVolume._lastLog || Date.now() - getVolume._lastLog > 1000) {
+    getVolume._lastLog = Date.now();
+    // dataArrayの先頭10個の生データも出力
+    console.log('[Audio] volume:', vol.toFixed(4), 'rms:', rms.toFixed(4), 'bins:', Array.from(dataArray.slice(0, 10)));
+  }
+
+  return vol;
 }
 
 /**

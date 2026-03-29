@@ -198,11 +198,11 @@ export function generateBlackVertices(notches = [], notchCloseFactor = 0, widthF
 /**
  * 頂点配列からPaper.jsのPathを生成する
  */
-export function createBlackPath(vertices) {
+export function createBlackPath(vertices, fillColor = '#1a1a1a') {
   return new paper.Path({
     segments: vertices,
     closed: true,
-    fillColor: '#1a1a1a',
+    fillColor,
     strokeColor: null,
   });
 }
@@ -210,8 +210,8 @@ export function createBlackPath(vertices) {
 /**
  * 黒オブジェクトを生成する便利関数
  */
-export function createBlackShape(notches = [], notchCloseFactor = 0, widthFactor = 1) {
+export function createBlackShape(notches = [], notchCloseFactor = 0, widthFactor = 1, fillColor = '#1a1a1a') {
   const vertices = generateBlackVertices(notches, notchCloseFactor, widthFactor);
-  const path = createBlackPath(vertices);
+  const path = createBlackPath(vertices, fillColor);
   return { path, vertices };
 }

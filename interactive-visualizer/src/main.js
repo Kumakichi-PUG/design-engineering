@@ -13,7 +13,7 @@ const canvas = document.getElementById('visualizer');
 paper.setup(canvas);
 
 // 背景（最背面に固定）
-new paper.Path.Rectangle({
+const bgRect = new paper.Path.Rectangle({
   point: [0, 0],
   size: [1920, 1080],
   fillColor: '#f8f8f8',
@@ -89,9 +89,17 @@ function updateFrame(event) {
   const indentAmount = vol * params.maxIndent;
   const ambientAmount = params.ambientAmount;
 
+  // デバッグ: 1秒ごとに音量パイプラインの値を出力
+  if (!updateFrame._lastLog || Date.now() - updateFrame._lastLog > 1000) {
+    updateFrame._lastLog = Date.now();
+    if (rawVolume > 0) {
+      console.log('[Main] raw:', rawVolume.toFixed(4), 'scaled:', scaledVolume.toFixed(4), 'smoothed:', vol.toFixed(4), 'width:', widthFactor.toFixed(4), 'indent:', indentAmount.toFixed(1));
+    }
+  }
+
   // --- 黒オブジェクト ---
   const notches = cachedNotches || getNotchesFromParams(params);
-  const blackVerts = createBlackShape(notches, notchCloseFactor, widthFactor);
+  const blackVerts = createBlackShape(notches, notchCloseFactor, widthFactor, params.blackColor);
 
   if (blackPath) blackPath.remove();
   blackPath = blackVerts.path;
@@ -106,6 +114,8 @@ function updateFrame(event) {
     ambientAmount,
     params.randomAmount,
     params.spacingRandomAmount,
+    params.angleRandomAmount,
+    params.clampStrength,
   );
 
   if (whitePath) {
@@ -118,7 +128,7 @@ function updateFrame(event) {
       whitePath = new paper.Path({
         segments: zigzagPts,
         closed: true,
-        fillColor: '#ffffff',
+        fillColor: params.whiteColor,
         strokeColor: null,
       });
     }
@@ -126,7 +136,7 @@ function updateFrame(event) {
     whitePath = new paper.Path({
       segments: zigzagPts,
       closed: true,
-      fillColor: '#ffffff',
+      fillColor: params.whiteColor,
       strokeColor: null,
     });
   }
@@ -143,8 +153,16 @@ function updateFrame(event) {
 }
 
 // --- GUI構築 ---
-const { params } = createGUI(onStructureChange);
+const { params, setColorChangeHandler } = createGUI(onStructureChange);
 onStructureChange();
+
+// カラー変更時: パスの fillColor だけを更新（形状再生成なし）
+setColorChangeHandler(() => {
+  document.body.style.backgroundColor = params.outsideColor;
+  bgRect.fillColor = params.bgColor;
+  if (blackPath) blackPath.fillColor = params.blackColor;
+  if (whitePath) whitePath.fillColor = params.whiteColor;
+});
 
 // --- マイク スタート/ストップ ---
 const micBtn = document.getElementById('mic-btn');
