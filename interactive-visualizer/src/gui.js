@@ -59,19 +59,19 @@ function linearToSrgb(x) {
 const PRESETS = {
   '矩形': [],
   'F型': [
-    { y: 0.20, height: 0.12, depth: 200 },
-    { y: 0.48, height: 0.38, depth: 450 },
+    { y: 0.20, height: 0.12, depthMin: 100, depthMax: 200 },
+    { y: 0.48, height: 0.38, depthMin: 225, depthMax: 450 },
   ],
   'E型': [
-    { y: 0.18, height: 0.12, depth: 350 },
-    { y: 0.45, height: 0.10, depth: 350 },
-    { y: 0.73, height: 0.12, depth: 350 },
+    { y: 0.18, height: 0.12, depthMin: 175, depthMax: 350 },
+    { y: 0.45, height: 0.10, depthMin: 175, depthMax: 350 },
+    { y: 0.73, height: 0.12, depthMin: 175, depthMax: 350 },
   ],
   'L型': [
-    { y: 0.05, height: 0.75, depth: 500 },
+    { y: 0.05, height: 0.75, depthMin: 250, depthMax: 500 },
   ],
   'T型': [
-    { y: 0.25, height: 0.75, depth: 600 },
+    { y: 0.25, height: 0.75, depthMin: 300, depthMax: 600 },
   ],
 };
 
@@ -88,15 +88,18 @@ export function createGUI(onUpdate) {
 
     notch1_y: 0.20,
     notch1_height: 0.12,
-    notch1_depth: 200,
+    notch1_depthMin: 100,
+    notch1_depthMax: 200,
 
     notch2_y: 0.48,
     notch2_height: 0.38,
-    notch2_depth: 450,
+    notch2_depthMin: 225,
+    notch2_depthMax: 450,
 
     notch3_y: 0.70,
     notch3_height: 0.15,
-    notch3_depth: 300,
+    notch3_depthMin: 150,
+    notch3_depthMax: 300,
 
     // ジグザグ
     totalPoints: 80,
@@ -152,8 +155,11 @@ export function createGUI(onUpdate) {
     folder.add(params, `notch${i}_height`, 0.03, 0.50, 0.01)
       .name('高さ')
       .onChange(markCustomAndUpdate);
-    folder.add(params, `notch${i}_depth`, 30, 1500, 10)
-      .name('深さ (px)')
+    folder.add(params, `notch${i}_depthMin`, 10, 1500, 10)
+      .name('深さ Min')
+      .onChange(markCustomAndUpdate);
+    folder.add(params, `notch${i}_depthMax`, 10, 1500, 10)
+      .name('深さ Max')
       .onChange(markCustomAndUpdate);
     notchFolders.push(folder);
   }
@@ -271,7 +277,8 @@ export function createGUI(onUpdate) {
       const idx = i + 1;
       params[`notch${idx}_y`] = n.y;
       params[`notch${idx}_height`] = n.height;
-      params[`notch${idx}_depth`] = n.depth;
+      params[`notch${idx}_depthMin`] = n.depthMin;
+      params[`notch${idx}_depthMax`] = n.depthMax;
     });
   }
 
@@ -304,7 +311,8 @@ export function getNotchesFromParams(params) {
     notches.push({
       yRatio: params[`notch${i}_y`],
       heightRatio: params[`notch${i}_height`],
-      depth: params[`notch${i}_depth`],
+      depthMin: params[`notch${i}_depthMin`],
+      depthMax: params[`notch${i}_depthMax`],
     });
   }
   return notches.sort((a, b) => a.yRatio - b.yRatio);

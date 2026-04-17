@@ -10,22 +10,22 @@
       padding: 0;
       box-sizing: border-box;
     }
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
       background: #e0e0e0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     #canvas-container {
-      position: relative;
-      width: 1920px;
-      height: 1080px;
-      max-width: 100vw;
-      max-height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
     canvas {
+      display: block;
       width: 100%;
       height: 100%;
     }
@@ -67,7 +67,7 @@
 </head>
 <body>
   <div id="canvas-container">
-    <canvas id="visualizer" width="1920" height="1080"></canvas>
+    <canvas id="visualizer"></canvas>
   </div>
   <div id="controls">
     <button id="mic-btn">MIC OFF</button>

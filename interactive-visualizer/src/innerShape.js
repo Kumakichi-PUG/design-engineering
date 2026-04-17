@@ -1,18 +1,17 @@
 import paper from 'paper';
+import { getOffsetPx } from './shape.js';
 
 /**
  * 白オブジェクト（内側）
- * - 黒の60px内側オフセット
+ * - 黒の内側オフセット（ビューサイズに連動）
  * - パス全周に等間隔でジグザグポイントを配置
  * - 無音時でも微かに動くアンビエントモーション
  */
 
-const OFFSET = 60;
-
 /**
  * 直角ポリゴンの各辺を内側にオフセットし、白の頂点を算出する
  */
-export function generateWhiteVertices(blackVertices, offset = OFFSET) {
+export function generateWhiteVertices(blackVertices, offset) {
   const n = blackVertices.length;
 
   const offsetEdges = [];

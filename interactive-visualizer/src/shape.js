@@ -9,17 +9,37 @@ import paper from 'paper';
  * 3. ノッチが下端に接触 → 右下角の頂点とノッチ出口を省略
  */
 
-// 描画領域の定数
-export const MARGIN = 40;
-export const ARTBOARD_W = 1920;
-export const ARTBOARD_H = 1080;
-export const DRAW_X = MARGIN;
-export const DRAW_Y = MARGIN;
-export const DRAW_W = ARTBOARD_W - MARGIN * 2; // 1840
-export const DRAW_H = ARTBOARD_H - MARGIN * 2; // 1000
+// 描画領域のマージン比率（短辺に対する比率）
+const MARGIN_RATIO = 40 / 1080;
+
+/**
+ * 現在のビューサイズから描画領域を算出する
+ * @param {number} viewW - ビュー幅
+ * @param {number} viewH - ビュー高さ
+ */
+export function getDrawArea(viewW, viewH) {
+  const margin = Math.round(Math.min(viewW, viewH) * MARGIN_RATIO);
+  return {
+    margin,
+    drawX: margin,
+    drawY: margin,
+    drawW: viewW - margin * 2,
+    drawH: viewH - margin * 2,
+  };
+}
 
 /** 静音時の最小幅（描画領域に対する比率） */
 const MIN_WIDTH_RATIO = 0.25;
+
+// 白オブジェクトのオフセット比率（短辺に対する比率、元は60/1080）
+const OFFSET_RATIO = 60 / 1080;
+
+/**
+ * 現在のビューサイズに応じたオフセット量(px)を返す
+ */
+export function getOffsetPx(area) {
+  return Math.round(Math.min(area.drawW + area.margin * 2, area.drawH + area.margin * 2) * OFFSET_RATIO);
+}
 
 /** 端の接触判定しきい値 */
 const EDGE_EPS = 1.0;
@@ -27,18 +47,27 @@ const EDGE_EPS = 1.0;
 /**
  * ノッチ群を右辺プロファイルに変換し、重なりを結合する
  */
-function buildMergedProfile(notches, notchCloseFactor, effectiveWidth) {
+function buildMergedProfile(notches, notchCloseFactor, effectiveWidth, area) {
   const MIN_DEPTH = 10;
-  const topY = DRAW_Y;
-  const bottomY = DRAW_Y + DRAW_H;
-  // ノッチ深さの最大値（白のオフセット60px×2を確保）
-  const maxDepth = effectiveWidth - 120;
+  const topY = area.drawY;
+  const bottomY = area.drawY + area.drawH;
+  // ノッチ深さの最大値（白のオフセット分を確保）
+  const offsetPx = getOffsetPx(area);
+  const maxDepth = effectiveWidth - offsetPx * 2;
 
   const rects = notches.map((n) => {
-    const rawDepth = Math.max(MIN_DEPTH, n.depth * (1 - notchCloseFactor));
+    // depthMin/depthMax がある場合はレンジ補間、なければ単一depth
+    let rawDepth;
+    if (n.depthMin != null && n.depthMax != null) {
+      // notchCloseFactor: 0=静音→depthMax, 1=大音量→depthMin
+      rawDepth = n.depthMax + (n.depthMin - n.depthMax) * notchCloseFactor;
+    } else {
+      rawDepth = n.depth * (1 - notchCloseFactor);
+    }
+    rawDepth = Math.max(MIN_DEPTH, rawDepth);
     const depth = Math.min(rawDepth, maxDepth);
-    const top = Math.max(topY, DRAW_Y + n.yRatio * DRAW_H);
-    const bottom = Math.min(bottomY, top + n.heightRatio * DRAW_H);
+    const top = Math.max(topY, area.drawY + n.yRatio * area.drawH);
+    const bottom = Math.min(bottomY, top + n.heightRatio * area.drawH);
     return { top, bottom, depth };
   }).filter((r) => r.bottom > r.top);
 
@@ -121,29 +150,30 @@ function deduplicateVertices(vertices) {
  * @param {number} widthFactor - 幅の比率（0=最小幅, 1=フル幅）音量連動
  * @returns {paper.Point[]} 頂点配列（時計回り）
  */
-export function generateBlackVertices(notches = [], notchCloseFactor = 0, widthFactor = 1) {
-  const effectiveWidth = DRAW_W * MIN_WIDTH_RATIO + DRAW_W * (1 - MIN_WIDTH_RATIO) * widthFactor;
-  const rightEdge = DRAW_X + effectiveWidth;
-  const topY = DRAW_Y;
-  const bottomY = DRAW_Y + DRAW_H;
+export function generateBlackVertices(notches = [], notchCloseFactor = 0, widthFactor = 1, area = null) {
+  if (!area) area = getDrawArea(1920, 1080);
+  const effectiveWidth = area.drawW * MIN_WIDTH_RATIO + area.drawW * (1 - MIN_WIDTH_RATIO) * widthFactor;
+  const rightEdge = area.drawX + effectiveWidth;
+  const topY = area.drawY;
+  const bottomY = area.drawY + area.drawH;
 
   if (notches.length === 0) {
     return [
-      new paper.Point(DRAW_X, topY),
+      new paper.Point(area.drawX, topY),
       new paper.Point(rightEdge, topY),
       new paper.Point(rightEdge, bottomY),
-      new paper.Point(DRAW_X, bottomY),
+      new paper.Point(area.drawX, bottomY),
     ];
   }
 
-  const groups = buildMergedProfile(notches, notchCloseFactor, effectiveWidth);
+  const groups = buildMergedProfile(notches, notchCloseFactor, effectiveWidth, area);
 
   if (groups.length === 0) {
     return [
-      new paper.Point(DRAW_X, topY),
+      new paper.Point(area.drawX, topY),
       new paper.Point(rightEdge, topY),
       new paper.Point(rightEdge, bottomY),
-      new paper.Point(DRAW_X, bottomY),
+      new paper.Point(area.drawX, bottomY),
     ];
   }
 
@@ -154,7 +184,7 @@ export function generateBlackVertices(notches = [], notchCloseFactor = 0, widthF
 
   const vertices = [];
 
-  vertices.push(new paper.Point(DRAW_X, topY));
+  vertices.push(new paper.Point(area.drawX, topY));
 
   if (!touchesTop) {
     vertices.push(new paper.Point(rightEdge, topY));
@@ -190,7 +220,7 @@ export function generateBlackVertices(notches = [], notchCloseFactor = 0, widthF
     vertices.push(new paper.Point(rightEdge, bottomY));
   }
 
-  vertices.push(new paper.Point(DRAW_X, bottomY));
+  vertices.push(new paper.Point(area.drawX, bottomY));
 
   return deduplicateVertices(vertices);
 }
@@ -210,8 +240,8 @@ export function createBlackPath(vertices, fillColor = '#1a1a1a') {
 /**
  * 黒オブジェクトを生成する便利関数
  */
-export function createBlackShape(notches = [], notchCloseFactor = 0, widthFactor = 1, fillColor = '#1a1a1a') {
-  const vertices = generateBlackVertices(notches, notchCloseFactor, widthFactor);
+export function createBlackShape(notches = [], notchCloseFactor = 0, widthFactor = 1, fillColor = '#1a1a1a', area = null) {
+  const vertices = generateBlackVertices(notches, notchCloseFactor, widthFactor, area);
   const path = createBlackPath(vertices, fillColor);
   return { path, vertices };
 }

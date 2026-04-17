@@ -1,5 +1,5 @@
 import paper from 'paper';
-import { createBlackShape } from './shape.js';
+import { createBlackShape, getDrawArea, getOffsetPx } from './shape.js';
 import {
   generateWhiteVertices,
   generateZigzagPoints,
@@ -12,12 +12,23 @@ import { initAudio, stopAudio, getVolume, isActive } from './audio.js';
 const canvas = document.getElementById('visualizer');
 paper.setup(canvas);
 
+// 初期サイズをウィンドウに合わせる
+function resizeCanvas() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  paper.view.viewSize = new paper.Size(w, h);
+  bgRect.bounds = new paper.Rectangle(0, 0, w, h);
+}
+
 // 背景（最背面に固定）
 const bgRect = new paper.Path.Rectangle({
   point: [0, 0],
-  size: [1920, 1080],
+  size: [window.innerWidth, window.innerHeight],
   fillColor: '#f8f8f8',
 });
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
 // --- 描画オブジェクト ---
 let blackPath = null;
@@ -97,15 +108,21 @@ function updateFrame(event) {
     }
   }
 
+  // --- 描画領域（ビューサイズから動的計算） ---
+  const viewW = paper.view.viewSize.width;
+  const viewH = paper.view.viewSize.height;
+  const area = getDrawArea(viewW, viewH);
+  const offsetPx = getOffsetPx(area);
+
   // --- 黒オブジェクト ---
   const notches = cachedNotches || getNotchesFromParams(params);
-  const blackVerts = createBlackShape(notches, notchCloseFactor, widthFactor, params.blackColor);
+  const blackVerts = createBlackShape(notches, notchCloseFactor, widthFactor, params.blackColor, area);
 
   if (blackPath) blackPath.remove();
   blackPath = blackVerts.path;
 
   // --- 白オブジェクト ---
-  const whiteVerts = generateWhiteVertices(blackVerts.vertices);
+  const whiteVerts = generateWhiteVertices(blackVerts.vertices, offsetPx);
   const zigzagPts = generateZigzagPoints(
     whiteVerts,
     params.totalPoints,
