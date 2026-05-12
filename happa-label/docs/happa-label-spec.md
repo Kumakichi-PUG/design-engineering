@@ -898,14 +898,22 @@ Phase 0 は単一 agent で完結、A〜C は §10.1 のとおり複数 agent �
 
 ## 11. Open Questions
 
-| ID    | Topic                                                  | 方針                                       | Owner         |
-| ----- | ------------------------------------------------------ | ------------------------------------------ | ------------- |
-| OQ-L1 | SVG 出力時の Overlay embed 方法                        | base64 data URL で `<image>` に埋め込む。サイズ肥大時は外部参照に切替検討 | @export-agent |
-| OQ-L2 | PNG ×4 でのパフォーマンス（4320×4320 想定）            | 実走で計測。許容範囲なら採用、遅い場合はワーカー化検討 | @export-agent |
-| OQ-L3 | Overlay 画像のキャッシュ戦略（state.overlayDataUrl）   | localStorage 不採用、メモリ（HTMLImageElement のマップ）のみ | @state-agent  |
-| OQ-L4 | SVG での Voronoi セル数上限（200 cells × paths）       | 実走で確認、ファイルサイズが大きすぎる場合は警告表示 | @export-agent |
-| OQ-L5 | aspect ratio プリセットにラベル比率を追加するか        | v0.1 は維持（16:9 / 4:3 / 1:1 / 9:16）、B フェーズで検討 | Takuto        |
-| OQ-L6 | Overlay 画像サイズ上限（メモリ保護）                   | 4096×4096px / 10MB を上限とし、超過時は警告 | @ui-agent     |
+### 11.1 CLOSED in v0.1
+
+| ID    | Topic                                                  | 採用された結論                                                                                                                                       | 実装位置                                                              |
+| ----- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| OQ-L1 | SVG 出力時の Overlay embed 方法                        | base64 data URL を `<image href="…">` に直接埋め込む方式を採用（外部参照切替は v0.1 では実装せず、ファイルサイズ拡大が問題化した時点で OQ-L4 と合わせて再評価）。 | `src/export/svg.ts`（Phase C）                                        |
+| OQ-L3 | Overlay 画像のキャッシュ戦略（`state.overlayDataUrl`） | `Map<string, HTMLImageElement>` をモジュールローカルに保持。`localStorage` / `IndexedDB` は不採用（禁忌 §6）。dataUrl をキーに同一 Image 参照をフレーム間で再利用しデコード回避。 | `src/render/overlay.ts`（Phase B）                                    |
+| OQ-L6 | Overlay 画像サイズ上限（メモリ保護）                   | `file.size > 10 MB` → `window.alert` で中断、`naturalWidth/Height > 4096` → 同様。失敗時は `fileInput.value` を reset し再選択可能。                  | `src/ui/overlayPicker.ts`（Phase B）                                  |
+
+### 11.2 OPEN (v0.1 持ち越し、post-v0.1 / Phase D 候補)
+
+| ID    | Topic                                                  | 現状 / 検討メモ                                                                                                                                       | Owner         |
+| ----- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| OQ-L2 | PNG ×4 でのパフォーマンス（4320×4320 想定）            | Phase C 動作確認では許容範囲内だが、実機ベンチ未実施。複数解像度・複数 fragmentCount での計測が必要。閾値超過時は Web Worker 化を検討（OQ-L7 と統合可）。 | @export-agent |
+| OQ-L4 | SVG での Voronoi セル数上限（200 cells × paths）       | Phase C 動作確認では問題なし。ファイルサイズ計測未実施。閾値（例: 1MB）超過時にユーザー警告を出す UI は未実装。                                       | @export-agent |
+| OQ-L5 | aspect ratio プリセットにラベル比率を追加するか        | v0.1 は維持（16:9 / 4:3 / 1:1 / 9:16）。ボトルラベル/缶ラベル等の実用比率（例: 2:3、3:4、5:7）を追加するか、ユーザー任意比率入力を許すかは post-v0.1 で検討。 | Takuto        |
+| OQ-L7 | GIF export 中のメインスレッドブロック                  | `gifenc` の `quantize` + `applyPalette` を 90 frames 走らせる間、メインスレッドが数秒占有される。v0.1 ではボタン `disabled` + busy フラグで UX を保護したが、根本解決は Web Worker（`OffscreenCanvas` + `gifenc` を Worker 化）への移行。OQ-L2 と統合して Phase D で検討。 | @export-agent |
 
 ---
 
@@ -984,6 +992,11 @@ export const DEFAULTS: AppState = {
   - テキスト・混植・フォントライブラリ・warped silhouette を削除
   - 色を 2 色（Surface / Inner）に簡素化
   - レイアウトを `pad = gutter + bleed` に簡素化（textBand / textMargin / fontSize 削除）
+- **v0.1 完成 sweep (2026-05-12)**: Phase 0 → C 全工程完了。
+  - Open Questions §11 を CLOSED / OPEN に再構成。OQ-L1 / OQ-L3 / OQ-L6 を CLOSED に降ろし実装位置を明記。OQ-L7（GIF メインスレッドブロック → Web Worker 化）を新規追加し OQ-L2 と統合候補として明示。
+  - GIF エンコーダは `gifenc` v1.0.3 を採用（Takuto 承認、Phase C キックオフ時）。FR-L03 はそのまま（30fps × 3s = 90 frames、最大辺 900px）。
+  - parent の Phase J/K1 リファクタ（`isPhantom` / `shapeScale` / radial 連続カーブ）は本書 spec §6.3 / §4.5 と乖離していたため、Phase A で spec を正本として逆移行（`isInner` binary 分類 + `state.randomness` / `directionNoise` / `rotation` を復活）。
+  - parent の `core/polygon.ts` が持っていた `shapeScale` パラメータは spec §4.1 と整合させるため撤去（Phase 0 → A 移行時）。
   - SVG エクスポート（DL-4）と PNG 倍率指定（DL-3）を追加
   - Overlay は継承するが「静止描画」に変更（cell 単位 clip 廃止）
   - UI アイデンティティは Happo VM を継承（DL-7）
