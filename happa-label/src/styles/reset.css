@@ -1,0 +1,63 @@
+/* ────────────────────────────────────────────────────────────────
+ * happa-label — minimal CSS reset.
+ *
+ * Scope: strip user-agent defaults that fight the dark monochrome
+ * design system (spec §8.1 / DL-7). No decorative smoothing.
+ * ──────────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  /* Stage locks the viewport; controls scroll internally. */
+  overflow: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}

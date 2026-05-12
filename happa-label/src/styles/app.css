@@ -1,0 +1,450 @@
+/* ────────────────────────────────────────────────────────────────
+ * happa-label — layout shell, base typography, control primitives.
+ *
+ * Inherited from parent happa designtool v1.1 (`src/styles/app.css`)
+ * per spec §8.1 (DL-7). Trimmed for the label-VM scope:
+ *  - no textarea / select dropdown styling for text/font controls
+ *  - no font-status / font-picker-row (text・font 禁忌 §2)
+ *  - no overlay multi-slot layout (single Overlay loader in v0.1)
+ *
+ * Motion policy (spec §8.1 / parent §10.5):
+ *  - hover / focus: border + color shifts only
+ *  - button :active: translateY(1px) ceiling
+ *  - transitions: 0.1–0.15s on interactive feedback only
+ *  - NO decorative animation (fade-in, pulse, etc.)
+ * ──────────────────────────────────────────────────────────────── */
+
+/* ── Base typography ────────────────────────────────────────── */
+body {
+  font-family: var(--sans);
+  font-size: var(--fs-value);
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ── App shell: fixed-width controls + fluid stage ──────────── */
+#app {
+  display: grid;
+  grid-template-columns: var(--controls-width) 1fr;
+  /* Row pinned to 100vh so .controls overflow-y can engage; matches
+   * parent Phase K2 fix (CONTROLS row needs explicit height). */
+  grid-template-rows: 100vh;
+  height: 100vh;
+  /* Desktop-first; avoid grid collapse on narrow widths. */
+  min-width: calc(var(--controls-width) + 360px);
+}
+
+/* ── Controls panel ─────────────────────────────────────────── */
+.controls {
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  /* Bottom padding is generous so the last Export row never hugs the
+   * viewport edge (top=24, bottom=48 mirrors parent). */
+  padding: var(--space-5) var(--space-panel-x) 48px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-panel-gap);
+}
+
+.controls::-webkit-scrollbar {
+  width: 6px;
+}
+.controls::-webkit-scrollbar-track {
+  background: transparent;
+}
+.controls::-webkit-scrollbar-thumb {
+  background: var(--border-hi);
+  border-radius: 3px;
+}
+
+/* ── Brand header ───────────────────────────────────────────── */
+.brand {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+.brand-title {
+  font-family: var(--mono);
+  font-size: var(--fs-brand);
+  letter-spacing: var(--tracking-brand);
+  font-weight: 600;
+  color: var(--text);
+}
+.brand-sub {
+  font-family: var(--mono);
+  font-size: var(--fs-section);
+  letter-spacing: var(--tracking-brand);
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+/* ── Stage (canvas host) ────────────────────────────────────── */
+.stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  background: #080808;
+  /* Dotted grid backdrop. Static — no motion violation. */
+  background-image: radial-gradient(circle at 1px 1px, #1a1a1a 1px, transparent 0);
+  background-size: 20px 20px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+/* ── Section primitives ─────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* SECTION LABELS — uppercase, monospaced, heavily tracked. */
+.section-label {
+  font-family: var(--mono);
+  font-size: var(--fs-section);
+  letter-spacing: var(--tracking-label);
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* Inline row: "<label> <slider> <value>". Used by every slider. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.row:last-child {
+  margin-bottom: 0;
+}
+.row label {
+  flex: 0 0 130px;
+  font-size: var(--fs-label);
+  color: var(--text);
+}
+
+/* Numeric / hex readouts always monospaced. */
+.mono,
+.value,
+.hex {
+  font-family: var(--mono);
+}
+.value {
+  font-size: var(--fs-label);
+  color: var(--dim2);
+  min-width: 44px;
+  text-align: right;
+}
+
+/* ── Segmented control (Aspect Ratio, PNG Scale) ────────────── */
+.segmented {
+  display: grid;
+  /* Default 4 columns; override with .segmented-N for other counts. */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--border);
+  padding: 2px;
+  border-radius: var(--radius-sm);
+}
+.segmented button {
+  background: transparent;
+  border: none;
+  color: var(--dim2);
+  padding: 8px 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: color var(--ts-norm);
+}
+.segmented button:hover {
+  color: var(--text);
+}
+.segmented button.active {
+  background: var(--text);
+  color: var(--bg);
+}
+.segmented button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* PNG Scale picker uses 3 segments. */
+.segmented-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* ── Polygon picker (Shape — Vertex Count) ──────────────────── */
+.polygon-picker {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+.polygon-picker button {
+  background: var(--border);
+  border: 1px solid transparent;
+  color: var(--dim2);
+  padding: 10px 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--ts-fast);
+}
+.polygon-picker button:hover {
+  color: var(--text);
+  border-color: var(--border-hi);
+}
+.polygon-picker button.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* ── Color picker row ───────────────────────────────────────── */
+.color-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.color-row:last-child {
+  margin-bottom: 0;
+}
+.color-row > label {
+  flex: 0 0 130px;
+  font-size: var(--fs-label);
+  color: var(--text);
+}
+.color-swatch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.color-swatch input[type='text'] {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg);
+  border: 1px solid var(--border-hi);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.05em;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--ts-fast);
+  text-transform: uppercase;
+}
+.color-swatch input[type='text']:hover {
+  border-color: var(--text);
+}
+.color-swatch input[type='text']:focus {
+  border-color: var(--accent);
+}
+.color-swatch input[type='text'].invalid {
+  border-color: var(--accent);
+}
+.color-swatch input[type='color'] {
+  width: 32px;
+  height: 24px;
+  border: 1px solid var(--border-hi);
+  background: transparent;
+  cursor: pointer;
+  padding: 1px;
+  border-radius: var(--radius-sm);
+  flex: 0 0 auto;
+}
+
+/* ── Range input ────────────────────────────────────────────── */
+input[type='range'] {
+  flex: 1;
+  accent-color: var(--accent);
+  min-width: 0;
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn {
+  width: 100%;
+  padding: 9px 12px;
+  background: transparent;
+  border: 1px solid var(--border-hi);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--ts-fast);
+  text-transform: uppercase;
+}
+.btn:hover {
+  border-color: var(--text);
+  background: #1a1a1a;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn.ghost {
+  color: var(--dim2);
+}
+
+/* Small top-of-section spacers for action buttons (parent rhythm). */
+.btn-shuffle {
+  margin-top: 6px;
+}
+.btn-randomize-colors {
+  margin-top: 6px;
+}
+.btn-reset {
+  margin-top: 10px;
+}
+
+/* DETONATE — accent-filled, high-tracking primary action. */
+.btn.detonate {
+  padding: 14px;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-size: var(--fs-body);
+  font-weight: 700;
+  letter-spacing: var(--tracking-detonate);
+}
+.btn.detonate:hover {
+  background: #ff4d1a;
+}
+.btn.detonate:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn.detonate:disabled {
+  background: #333;
+  color: #666;
+}
+
+/* Two-column button pair (used by Animation: DETONATE / RESET). */
+.button-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 6px;
+}
+
+/* Three-column row for export downloads (PNG / SVG / GIF). */
+.button-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+/* Timeline (Animation Progress) — same as base range, but with
+ * a grab cursor to signal manual scrub. */
+.timeline {
+  cursor: grab;
+}
+.timeline:active {
+  cursor: grabbing;
+}
+
+/* ── Toggle row (Overlay / Guides) ──────────────────────────── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  user-select: none;
+  color: var(--text);
+  font-size: var(--fs-value);
+  margin-bottom: 10px;
+  transition: all var(--ts-fast);
+}
+.toggle-row:last-child {
+  margin-bottom: 0;
+}
+.toggle-row:hover {
+  border-color: var(--dim2);
+}
+.toggle-row.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.toggle-row .state {
+  font-family: var(--mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+}
+
+/* ── Overlay file loader (single slot, v0.1) ────────────────── */
+/* Hidden native input; the dashed "Load Image" label is the hit area.
+ * On load the label flips to .loaded styling and shows the filename. */
+.file-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 12px;
+  border: 1px dashed var(--border-hi);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim2);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  border-radius: var(--radius-sm);
+  transition: all var(--ts-norm);
+  margin-bottom: 10px;
+  /* Truncate long filenames so the row never widens the panel. */
+  overflow: hidden;
+}
+.file-label:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+.file-label.loaded {
+  color: var(--accent);
+  border-color: var(--accent);
+  border-style: solid;
+}
+.file-label .filename {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.file-label input[type='file'] {
+  display: none;
+}
+
+/* ── Focus ring (a11y minimum) ──────────────────────────────── */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}

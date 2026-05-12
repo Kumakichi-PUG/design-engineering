@@ -1,0 +1,58 @@
+/* ────────────────────────────────────────────────────────────────
+ * happa-label — design tokens.
+ *
+ * Inherited from parent happa designtool v1.1 (`src/styles/tokens.css`)
+ * per spec §8.1 (DL-7). Trimmed for the label-VM scope: no text /
+ * font-related tokens (happa-label/AGENTS.md §6 禁忌 §2).
+ *
+ * Palette / font stacks are the canonical Happo VM values — do NOT
+ * alter without updating `docs/happa-label-spec.md` §8.1 first.
+ * ──────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Palette (spec §8.1 / DL-7) ───────────────────────────── */
+  --bg: #0a0a0a;
+  --panel: #111;
+  --border: #1f1f1f;
+  --border-hi: #2f2f2f;
+  --text: #ededed;
+  --dim: #666;
+  --dim2: #999;
+  --accent: #ff3300; /* happa line accent. structural only — never decorative */
+
+  /* ── Font stacks (spec §8.1) ──────────────────────────────── */
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --sans:
+    -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Noto Sans JP',
+    sans-serif;
+
+  /* ── Layout ───────────────────────────────────────────────── */
+  --controls-width: 320px;
+
+  /* ── Motion (interaction feedback only, 0.1–0.15s ceiling) ── */
+  --ts-fast: 0.1s;
+  --ts-norm: 0.15s;
+
+  /* ── Spacing scale (4-based, matches parent prototype rhythm) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-panel-x: 22px;
+  --space-panel-gap: 22px;
+
+  /* ── Typographic rhythm ───────────────────────────────────── */
+  --tracking-label: 0.18em;
+  --tracking-brand: 0.15em;
+  --tracking-detonate: 0.25em;
+
+  --fs-section: 9px; /* section labels, brand-sub */
+  --fs-label: 11px; /* mono readouts (slider value, hex) */
+  --fs-value: 12px; /* row labels */
+  --fs-body: 13px; /* DETONATE emphasis */
+  --fs-brand: 15px; /* brand wordmark */
+
+  /* ── Borders ──────────────────────────────────────────────── */
+  --radius-sm: 2px;
+}
